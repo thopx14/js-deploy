@@ -1,0 +1,80 @@
+#rating-container {
+  width: 80%;
+  max-width: 500px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  /* background-color: var(--color-primary-100); */
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.3);
+}
+
+#customer-rating-txt {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-family: 'Cabin', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.customer-name {
+  display: block;
+  margin-right: 0.5rem;
+  /* width: 5.7rem; */
+}
+
+.rating-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  font-weight: bold;
+}
+
+.rating-date {
+  color: rgba(0, 0, 0, 0.302);
+  /* font-size: 0.85rem; */
+}
+
+.rating-stars {
+  margin-right: 0.5rem;
+}
+
+.rating-stars svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: gold;
+}
+
+.rating-comment {
+  /* font-style: italic; */
+  color: rgb(132, 126, 126);
+}
+
+/* 
+  If there are is than 1 rating then add a margin-bottom.
+  It means select the rating-comment that comes directly after 
+  a .rating-header element. This is called 'Adjacent sibling combinator'
+  => https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator
+*/
+.rating-header + .rating-comment {
+  margin-bottom: 1rem;
+}
+
+#rating-error {
+  display: none;
+}
+
+#sad-smiley {
+  display: block;
+  width: 5rem;
+  margin: auto;
+  color: rgb(193, 113, 113);
+}
+
+.rating-error-text {
+  font-size: 1.5rem;
+  color: rgb(69, 59, 59);
+}
