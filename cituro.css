@@ -63,6 +63,43 @@
   margin-bottom: 1rem;
 }
 
+/* Container for summary at the end of the ratings component */
+.rating-summary-container {
+  color: rgb(132, 126, 126);
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.rating-summary-text {
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.rating-summary-text > a {
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.rating-summary-text > a:hover {
+  text-decoration: none;
+}
+
+.rating-summary-text > a:visited {
+  color: rgb(132, 126, 126);
+}
+
+.current-rating-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  font-weight: 700;
+}
+
+/* Rating error */
 #rating-error {
   display: none;
 }

@@ -27,12 +27,15 @@ function fetchCituroData() {
             if (userId && surroundingElementId) {
                 const surroundingElement = document.getElementById(surroundingElementId);
                 if (surroundingElement) {
-                    const cituro_api = `https://app.cituro.com/api/ratings/${userId}?limit=${limit}&sort=-createdAt&filter[comment]=!null`;
-                    const response = yield fetch(cituro_api);
-                    if (!response.ok) {
-                        throw new CannotFetchDataError({ message: response.statusText, surroundingElement: surroundingElement });
+                    const cituro_api_ratings = `https://app.cituro.com/api/ratings/${userId}?limit=${limit}&sort=-createdAt&filter[comment]=!null&[rating]=gte:4`;
+                    const response_ratings = yield fetch(cituro_api_ratings);
+                    if (!response_ratings.ok) {
+                        throw new CannotFetchDataError({
+                            message: response_ratings.statusText,
+                            surroundingElement: surroundingElement,
+                        });
                     }
-                    const { data } = yield response.json();
+                    const { data } = yield response_ratings.json();
                     data.forEach((ratingData) => {
                         createRatingElements(surroundingElement, ratingData);
                     });
@@ -40,7 +43,7 @@ function fetchCituroData() {
             }
             else {
                 throw new CannotFetchDataError({
-                    message: 'Could not extract data-user-account or data-surrounding-element-id from script. Please provide them!',
+                    message: 'Could not extract data-user-account or data-surrounding-element-id or data-surrounding-short-element-id from script. Please provide them!',
                     surroundingElement: null,
                 });
             }
@@ -52,6 +55,73 @@ function fetchCituroData() {
             });
         }
     });
+}
+function fetchCituroSummaryData() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (thisScriptElement) {
+            const userId = thisScriptElement.getAttribute('data-user-account');
+            const summarySurroundingElementId = thisScriptElement.getAttribute('data-surrounding-short-element-id');
+            if (userId && summarySurroundingElementId) {
+                const summarySurroundingElement = document.getElementById(summarySurroundingElementId);
+                if (summarySurroundingElement) {
+                    yield fetchSummaryDataAndDisplayItOnScreen(userId, summarySurroundingElement);
+                }
+            }
+        }
+    });
+}
+function fetchSummaryDataAndDisplayItOnScreen(userId, surroundingElement) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cituro_api_summary = `https://app.cituro.com/api/ratings/${userId}/summary`;
+        const response_summary = yield fetch(cituro_api_summary);
+        if (!response_summary.ok) {
+            throw new CannotFetchDataError({
+                message: response_summary.statusText,
+                surroundingElement: surroundingElement,
+            });
+        }
+        const { data } = yield response_summary.json();
+        const ratingElements = data.count;
+        if (ratingElements > 0) {
+            const avg = data.average;
+            const avgContainerElement = document.createElement('div');
+            avgContainerElement.classList.add('rating-summary-container');
+            const avgRatingText = document.createElement('p');
+            avgRatingText.classList.add('rating-summary-text');
+            avgRatingText.textContent = `${avg.toFixed(2)} aus 5 Sternen `;
+            const summaryStarsElement = document.createElement('span');
+            summaryStarsElement.classList.add('rating-stars');
+            const ratingStarsArray = generateRatingStarsSvg(avg);
+            summaryStarsElement.append(...ratingStarsArray);
+            const linkToCituroRatings = document.createElement('a');
+            linkToCituroRatings.setAttribute('href', 'https://app.cituro.com/ratings/claudia-knoblich-ayurveda-yoga-ulm');
+            linkToCituroRatings.setAttribute('target', '_blank');
+            linkToCituroRatings.textContent = `(${ratingElements} Bewertungen auf cituro.com)`;
+            avgRatingText.appendChild(linkToCituroRatings);
+            avgContainerElement.appendChild(avgRatingText);
+            avgContainerElement.appendChild(summaryStarsElement);
+            surroundingElement.appendChild(avgContainerElement);
+            generateJsonLdScriptForRatingSummary(avg.toFixed(2), ratingElements);
+        }
+    });
+}
+function generateJsonLdScriptForRatingSummary(avgRating, ratingCount) {
+    const script = document.createElement('script');
+    script.setAttribute('type', 'application/ld+json');
+    script.textContent = JSON.stringify({
+        '@context': 'https://schema.org/',
+        '@type': 'Product',
+        name: 'Claudia Knoblich Yoga & Ayurveda',
+        description: 'Ayurvedische Ganz- und Teilkörpermassagen, sowie Ernährungs- und Lebensstilberatungen',
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: avgRating,
+            bestRating: '5',
+            worstRating: '1',
+            ratingCount: ratingCount,
+        },
+    });
+    document.head.appendChild(script);
 }
 function createRatingElements(surroundingElement, ratingData) {
     const ratingContentElement = document.createElement('div');
@@ -123,5 +193,8 @@ fetchCituroData().catch((error) => {
         includedErrorObject.surroundingElement.appendChild(ratingErrorElement);
     }
     console.error('Could not write failure message for rating element. Check the logs!');
+});
+fetchCituroSummaryData().catch((error) => {
+    console.log(error);
 });
 //# sourceMappingURL=cituro.js.map
