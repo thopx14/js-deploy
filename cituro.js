@@ -88,18 +88,21 @@ function fetchSummaryDataAndDisplayItOnScreen(userId, surroundingElement) {
             avgContainerElement.classList.add('rating-summary-container');
             const avgRatingText = document.createElement('p');
             avgRatingText.classList.add('rating-summary-text');
-            avgRatingText.textContent = `${avg.toFixed(2)} aus 5 Sternen `;
+            avgRatingText.innerHTML = `<strong>${avg.toFixed(2)}</strong> aus 5 Sternen `;
             const summaryStarsElement = document.createElement('span');
             summaryStarsElement.classList.add('rating-stars');
             const ratingStarsArray = generateRatingStarsSvg(avg);
             summaryStarsElement.append(...ratingStarsArray);
+            const ratingLinktoCituroElement = document.createElement('p');
+            ratingLinktoCituroElement.classList.add('rating-summary-link-text');
             const linkToCituroRatings = document.createElement('a');
             linkToCituroRatings.setAttribute('href', 'https://app.cituro.com/ratings/claudia-knoblich-ayurveda-yoga-ulm');
             linkToCituroRatings.setAttribute('target', '_blank');
             linkToCituroRatings.textContent = `(${ratingElements} Bewertungen auf cituro.com)`;
-            avgRatingText.appendChild(linkToCituroRatings);
-            avgContainerElement.appendChild(avgRatingText);
+            ratingLinktoCituroElement.appendChild(linkToCituroRatings);
             avgContainerElement.appendChild(summaryStarsElement);
+            avgContainerElement.appendChild(avgRatingText);
+            avgContainerElement.appendChild(ratingLinktoCituroElement);
             surroundingElement.appendChild(avgContainerElement);
             generateJsonLdScriptForRatingSummary(avg.toFixed(2), ratingElements);
         }

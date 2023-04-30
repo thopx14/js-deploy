@@ -68,8 +68,8 @@
   color: rgb(132, 126, 126);
   display: flex;
   flex-wrap: nowrap;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -77,18 +77,24 @@
   font-family: 'Lato', sans-serif;
   font-weight: 500;
   font-size: 1rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
 }
 
-.rating-summary-text > a {
+.rating-summary-link-text {
+  margin: 0;
+}
+
+.rating-summary-link-text > a {
   text-decoration: underline;
   font-weight: 500;
 }
 
-.rating-summary-text > a:hover {
+.rating-summary-link-text > a:hover {
   text-decoration: none;
 }
 
-.rating-summary-text > a:visited {
+.rating-summary-link-text > a:visited {
   color: rgb(132, 126, 126);
 }
 
