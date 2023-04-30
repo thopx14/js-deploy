@@ -65,12 +65,12 @@
 
 /* Container for summary at the end of the ratings component */
 .rating-summary-container {
-  color: rgb(132, 126, 126);
+  color: black;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .rating-summary-text {
@@ -95,7 +95,7 @@
 }
 
 .rating-summary-link-text > a:visited {
-  color: rgb(132, 126, 126);
+  color: #444141;
 }
 
 .current-rating-text {
